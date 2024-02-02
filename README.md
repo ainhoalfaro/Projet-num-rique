@@ -1,2 +1,2 @@
-# Projet-num-rique
+# Projet-numérique
 Électromagnétisme 1

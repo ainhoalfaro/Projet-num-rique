@@ -108,3 +108,27 @@ epsilon = 8.85e-12  # Constante électrique en F/m
 q = 1e-9  # Valeur de la charge en C (exemple)
 potentiel = calcul_potentiel(epsilon, norme_PM, q)
 print("Potentiel électrique calculé au point M:", potentiel, "V")
+
+
+
+
+def calcul_champ_electrique(PM, q):
+    # Calcul des composantes de PM
+    x_PM, y_PM, z_PM = PM
+    
+    # Calcul de la norme de PM
+    norme_PM = calcul_norme_vect(PM)
+    
+    # Calcul des composantes du champ électrique
+    Ex = q * x_PM / (4 * np.pi * epsilon * norme_PM ** 3)
+    Ey = q * y_PM / (4 * np.pi * epsilon * norme_PM ** 3)
+    Ez = q * z_PM / (4 * np.pi * epsilon * norme_PM ** 3)
+    
+    return [Ex, Ey, Ez]
+
+# Test de la fonction
+PM = [1, 2, 3]  # Vecteur PM (exemple)
+q = 1e-9  # Valeur de la charge en C (exemple)
+epsilon = 8.85e-12  # Constante électrique en F/m
+composantes_E = calcul_champ_electrique(PM, q)
+print("Composantes du champ électrique:", composantes_E)

@@ -30,3 +30,38 @@ def grad_space(h1, h2):
 grad_space(1, 2)  # Test avec des pas h1=1 et h2=2
 
 
+
+
+#version originale
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def grad_space(h1, h2):
+    # Générer le maillage de distribution avec un pas h1
+    x1 = np.arange(-10, 10, h1)
+    y1 = np.arange(-10, 10, h1)
+    z1 = np.arange(-10, 10, h1)
+    X1, Y1, Z1 = np.meshgrid(x1, y1, z1)
+
+    # Générer le maillage de représentation avec un pas h2
+    x2 = np.arange(-10, 10, h2)
+    y2 = np.arange(-10, 10, h2)
+    z2 = np.arange(-10, 10, h2)
+    X2, Y2, Z2 = np.meshgrid(x2, y2, z2)
+
+    # Afficher les maillages
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(X1, Y1, Z1, color='green', label=f'Maillage h1={h1}')
+    ax.scatter(X2, Y2, Z2, color='blue', label=f'Maillage h2={h2}')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.legend()
+    plt.show()
+
+# Test de la fonction
+grad_space(1, 2)  # Test avec des pas h1=1 et h2=2

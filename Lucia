@@ -90,3 +90,18 @@ PM = calcul_composantes_vect(M, P)
 norme_PM = calcul_norme_vect(PM)
 print("Composantes de PM:", PM)
 print("Norme de PM:", norme_PM)
+
+
+
+#NIVEAU 2
+def calcul_potentiel(epsilon, PM_normalized, q):
+    # Calcul du potentiel électrique au point M dû à la charge q
+    V = q / (4 * np.pi * epsilon * PM_normalized)
+    return V
+
+# Test de la fonction
+epsilon = 8.85e-12  # Constante électrique en F/m
+PM_normalized = np.array([0.26726124, 0.53452248, 0.80178373])  # Vecteur PM normalisé (exemple)
+q = 1e-9  # Valeur de la charge en C (exemple)
+potentiel = calcul_potentiel(epsilon, PM_normalized, q)
+print("Potentiel électrique calculé au point M:", potentiel, "V")

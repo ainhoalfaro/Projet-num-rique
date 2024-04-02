@@ -40,3 +40,19 @@ print("Potentiel électrique calculé au point M:", potentiel, "V")
 champ_electrique = calcul_champ_electrique(epsilon, norme_PM, q, PM)
 print("Champ électrique calculé au point M:", champ_electrique, "N/C")
 
+
+import numpy as np
+
+def calcul_norme_vect(PM):
+    # Calculer la norme du vecteur PM
+    somme_carres = 0
+    for comp in PM:
+        somme_carres += comp ** 2
+    norme_PM = np.sqrt(somme_carres)
+    return norme_PM
+
+# Test de la fonction pour calculer la norme du vecteur
+PM = [2, 3, 4]
+norme_PM = calcul_norme_vect(PM)
+print("Norme de PM:", norme_PM)
+

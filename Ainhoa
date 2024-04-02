@@ -1,2 +1,7 @@
-ainhoa
-hola
+def calcul_norme_vect(PM):
+    # calculer la norme du vecteur PM
+    somme = 0
+    for i in PM:
+        somme += i** 2
+    norme_PM = np.sqrt(somme)
+    return norme_PM

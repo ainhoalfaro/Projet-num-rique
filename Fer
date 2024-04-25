@@ -37,7 +37,7 @@ def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
 P_position = [0, 0, 0]
 charge = 1
 
-epsilon = 1 / (4 * np.pi)
+epsilon =  8.85e-12 #1 / (4 * np.pi)
 
 N = 10
 h = 1

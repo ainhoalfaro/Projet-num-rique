@@ -168,4 +168,105 @@ ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 
 plt.show()
 
+#######################################################################################################################
+CODE AVEC TEST EN UN POINT 
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def maillage_M(h, N):
+    maillage = []
+    for i in range(N):
+        maillage.append([])
+        for j in range(N):
+            maillage[i].append([])
+            for k in range(N):
+                maillage[i][j].append((i * h, j * h, k * h))
+    return maillage
+
+def calcul_composantes_vect(M_point, position):
+    # Calculer les composantes du vecteur PM pour un point M donné
+    PM = [M_point[i] - position[i] for i in range(3)]
+    return PM
+
+def calcul_norme_vect(PM):
+    # Calculer la norme du vecteur PM
+    somme = sum(comp ** 2 for comp in PM)
+    norme_PM = np.sqrt(somme)
+    return norme_PM
+
+def calcul_potentiel(epsilon, norme_PM, charge):
+    # Calcul du potentiel électrique 
+    V = charge / (4 * np.pi * epsilon * norme_PM)
+    return V
+
+def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
+    # Calculer les composantes du champ électrique
+    E_components = [(comp * charge / (norme_PM ** 3)) * (4 * np.pi * epsilon) for comp in PM]
+    E = np.array(E_components)
+    return E
+
+def calcul_charge(position, x_min, x_max, y_min1, y_max1, y_min2, y_max2):
+    x, y, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if x_min <= x <= x_max and y_min1 <= y <= y_max1:  # Plaque positive
+        return 1.0
+    elif x_min <= x <= x_max and y_min2 <= y <= y_max2:  # Plaque négative
+        return -1.0
+    else:
+        return 0.0  # Aucune charge ailleurs
+
+P_position = [0, 0, 0]
+x_min, x_max = 2, 8
+y_min1, y_max1 = 4, 6
+y_min2, y_max2 = 14, 16
+
+epsilon = 1 / (4 * np.pi)
+
+N = 20 #maillage de dimension 20x20x20, ce qui signifie que votre espace est divisé en 20 intervalles le long de chaque axe (x, y, z), et chaque intervalle a une taille de 1 unité dans chaque direction.
+h = 1
+M = maillage_M(h, N)
+
+# Calculer le potentiel électrique et le champ électrique pour chaque point du maillage
+potentiel_values = np.zeros((N, N, N))
+champ_electrique_values = np.zeros((N, N, N, 3))
+
+# Test et impression de la valeur du potentiel et du champ électrique à un point donné
+test_point = (6, 15, 0)  # Coordonnées du point de test
+
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            PM = calcul_composantes_vect(M[i][j][k], P_position)
+            norme_PM = calcul_norme_vect(PM)
+            charge_at_point = calcul_charge(M[i][j][k], x_min, x_max, y_min1, y_max1, y_min2, y_max2)
+            potentiel_values[i, j, k] = calcul_potentiel(epsilon, norme_PM, charge_at_point)
+            champ_electrique_values[i, j, k] = calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
+            
+            # Test et impression de la valeur du potentiel et du champ électrique au point de test
+            if M[i][j][k] == test_point:
+                print("Coordonnées du point de test :", test_point)
+                print("Potentiel électrique au point de test :", potentiel_values[i, j, k])
+                print("Champ électrique au point de test :", champ_electrique_values[i, j, k])
+                print()
+
+# Affichage des vecteurs du champ électrique
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(0, N, 2):
+    for j in range(0, N, 2):
+        for k in range(0, N, 2):
+            ax.quiver(M[i][j][k][0], M[i][j][k][1], M[i][j][k][2],
+                      champ_electrique_values[i, j, k][0],
+                      champ_electrique_values[i, j, k][1],
+                      champ_electrique_values[i, j, k][2],
+                      length=1, normalize=True, color='blue')
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
+
 

@@ -37,7 +37,7 @@ def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
 P_position = [0, 0, 0]
 charge = 1
 
-epsilon =  8.85e-12 #1 / (4 * np.pi)
+epsilon =  1 / (4 * np.pi)
 
 N = 10
 h = 1
@@ -222,7 +222,7 @@ x_min, x_max = 2, 8
 y_min1, y_max1 = 4, 6
 y_min2, y_max2 = 14, 16
 
-epsilon = 1 / (4 * np.pi)
+epsilon = 8.85e-12 #1 / (4 * np.pi)
 
 N = 20 #maillage de dimension 20x20x20, ce qui signifie que votre espace est divisé en 20 intervalles le long de chaque axe (x, y, z), et chaque intervalle a une taille de 1 unité dans chaque direction.
 h = 1

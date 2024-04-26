@@ -63,7 +63,7 @@ print("Champ électrique calculé au point M:", champ_electrique, "N/C")
 
 
 ##############################################################################################################################
-FINAL 25/04/2023
+FINAL 26/04/2023
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -163,3 +163,18 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 
+# Créer une grille pour les lignes équipotentielles
+x = np.linspace(0, N-1, N)
+y = np.linspace(0, N-1, N)
+z = np.linspace(0, N-1, N)
+X, Y, Z = np.meshgrid(x, y, z)
+
+# Tracer les lignes équipotentielles
+plt.figure(figsize=(12, 9))
+plt.contour(X[:,:,0], Y[:,:,0], potentiel_values[:,:,0], 50, cmap='coolwarm')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Lignes équipotentielles d\'un condensateur avec distribution de charge')
+plt.colorbar(label='Potentiel électrique (V)')
+plt.grid(True)
+plt.show()

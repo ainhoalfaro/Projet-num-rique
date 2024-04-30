@@ -94,3 +94,118 @@ for i in range(N):
 # Affichage des vecteurs du champ électrique
 fig = plt.figure(figsize=(12, 9))
 ax = fig.add_subplot(111, projection='3d')
+
+
+#####################################################################
+version sin errores pero sin graphique 
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def maillage(h, N):
+    maillage = []
+    for i in range(N):
+        maillage.append([])
+        for j in range(N):
+            maillage[i].append([])
+            for k in range(N):
+                maillage[i][j].append((i * h, j * h, k * h))
+    return maillage
+
+def calcul_composantes_vect(M_point, position):
+    # Calculer les composantes du vecteur PM pour un point M donné
+    PM = np.array(M_point) - np.array(position)
+    return PM
+
+def calcul_norme_vect(PM):
+    # Calculer la norme du vecteur PM
+    norme_PM = np.linalg.norm(PM)
+    return norme_PM
+
+def calcul_potentiel(epsilon, norme_PM, charge):
+    # Calcul du potentiel électrique 
+    V = charge / (4 * np.pi * epsilon * norme_PM)
+    return V
+
+def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
+    # Calculer les composantes du champ électrique
+    E = (charge * PM) / (4 * np.pi * epsilon * (norme_PM ** 3))
+    return E
+
+def distribution_plaqueinfinie(position, y):
+    x, ypos, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if ypos == yfixe: # Plaque positive
+        return 1.0
+    else:
+        return 0.0  # Aucune charge ailleurs 
+    
+
+#def distribution_plaqueinfinie(position, yplaque):
+    try:
+        x, ypos, z = position  # Expecting a tuple with three elements
+    except ValueError:
+        print("Error unpacking position:", position)  # This will show what's wrong
+        raise  # Re-raise the exception to stop execution and signal the error
+
+    if ypos == yplaque:
+        return 1.0  # Plaque positive
+    else:
+        return 0.0  # Aucune charge ailleurs
+
+
+
+
+# Paramètres
+epsilon = 8.85e-12  # Constante diélectrique du vide
+yfixe = 0.0  # Position y de la plaque chargée
+
+N = 20  # Maillage de dimension 20x20x20, ce qui signifie que votre espace est divisé en 20 intervalles le long de chaque axe (x, y, z), et chaque intervalle a une taille de 1 unité dans chaque direction.
+h = 1.0
+
+# Génération des maillages
+maillage_M = maillage(h, N)
+maillage_P = maillage(h, N)
+
+# Position de la plaque chargée
+yplaque = 6
+
+# Calcul du champ électrique créé par la distribution d'une plaque infinie dans le maillage P partout dans le maillage M
+#champ_electrique_M = np.zeros((N, N, N, 3))
+
+for M in maillage_M:
+    E = np.zeros((N, N, 3))
+    for P in maillage_P:
+        print(P)
+        PM = calcul_composantes_vect(M, (0, yplaque, 0))
+        norme_PM = calcul_norme_vect(PM)
+        for x in range(20):
+            for y in range(20):
+                charge_at_point = distribution_plaqueinfinie(P[x][y], yplaque)
+        print(calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM))    
+        E += calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
+   # champ_electrique_M[i, j, k] = E
+
+# Affichage des vecteurs du champ électrique
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(0, N, 2):
+    for j in range(0, N, 2):
+        for k in range(0, N, 2):
+            ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
+                      champ_electrique_M[i, j, k][0],
+                      champ_electrique_M[i, j, k][1],
+                      champ_electrique_M[i, j, k][2],
+                      length=1, normalize=True, color='blue')
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
+
+plt.show()
+
+   

@@ -331,18 +331,14 @@ yplaque = 6
 # Calcul du champ électrique créé par la distribution d'une plaque infinie dans le maillage P partout dans le maillage M
 champ_electrique_M = np.zeros((N, N, N, 3))
 
-for i in range(N):
-    for j in range(N):
-        for k in range(N):
-            E = np.zeros(3)
-            for P_i in range(N):
-                for P_j in range(N):
-                    for P_k in range(N):
-                        PM = calcul_composantes_vect(maillage_M[i][j][k], maillage_P[P_i][P_j][P_k])
-                        norme_PM = calcul_norme_vect(PM)
-                        charge_at_point = distribution_plaqueinfinie(maillage_P[P_i][P_j][P_k], yplaque)
-                        E += calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
-            champ_electrique_M[i, j, k] = E
+for M in maillage_M:
+    E = np.zeros(3)
+    for P in maillage_P:
+        PM = calcul_composantes_vect(M, (0, yplaque, 0))
+        norme_PM = calcul_norme_vect(PM)
+        charge_at_point = distribution_plaqueinfinie(P, yplaque)
+        E += calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
+    champ_electrique_M[i, j, k] = E
 
 # Affichage des vecteurs du champ électrique
 fig = plt.figure(figsize=(12, 9))
@@ -364,5 +360,4 @@ ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 
 plt.show()
 
-
-
+   

@@ -361,7 +361,7 @@ ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 plt.show()
 
 ##########################################################
-VERSION ENSAYO 2.0
+VERSION A VERIFICAR: 
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -463,4 +463,3 @@ ax.set_zlabel('Z')
 ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
-   

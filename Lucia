@@ -227,3 +227,25 @@ plt.show()
 
 
 
+###########################################################
+TEST DU PROGRAMME
+
+for i in range (N):
+    M_point=(10,i,10)
+    position=(10,6,10)
+
+
+    a=calcul_composantes_vect(M_point, position)
+    
+
+    b=calcul_norme_vect(a)
+    
+
+    c=calcul_potentiel(epsilon, b, charge)
+
+    d=calcul_champ_electrique(epsilon, b, charge, a)
+    print(d)
+
+
+
+

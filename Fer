@@ -376,14 +376,16 @@ def maillage(h, N):
                 maillage[i][j].append((i * h, j * h, k * h))
     return maillage
 
+
 def calcul_composantes_vect(M_point, position):
     # Calculer les composantes du vecteur PM pour un point M donné
-    PM = np.array(M_point) - np.array(position)
+    PM = [M_point[i] - position[i] for i in range(3)]
     return PM
 
 def calcul_norme_vect(PM):
-    # Calculer la norme du vecteur PM
-    norme_PM = np.linalg.norm(PM)
+    # calculer la norme du vecteur PM
+    somme = sum(comp ** 2 for comp in PM)
+    norme_PM = np.sqrt(somme)
     return norme_PM
 
 def calcul_potentiel(epsilon, norme_PM, charge):
@@ -393,8 +395,14 @@ def calcul_potentiel(epsilon, norme_PM, charge):
 
 def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
     # Calculer les composantes du champ électrique
-    E = (charge * PM) / (4 * np.pi * epsilon * (norme_PM ** 3))
+    E_components = [(comp * charge / (norme_PM ** 3)) * (4 * np.pi * epsilon) for comp in PM]
+    E = np.array(E_components)
     return E
+
+def calcul_composantes_vect(M_point, position):
+    # Calculer les composantes du vecteur PM pour un point M donné
+    PM = np.array(M_point) - np.array(position)
+    return PM
 
 def distribution_plaqueinfinie(position, y, charge_unitaire):
     x, y, z = position
@@ -455,5 +463,4 @@ ax.set_zlabel('Z')
 ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
-
    

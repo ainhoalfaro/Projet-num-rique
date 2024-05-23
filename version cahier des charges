@@ -1,3 +1,16 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def maillage(h, N):
+    maillage = []
+    for i in range(N):
+        maillage.append([])
+        for j in range(N):
+            maillage[i].append([])
+            for k in range(N):
+                maillage[i][j].append((i * h, j * h, k * h))
+    return maillage
  
 #NIVEAU 4
 #creation de la fonction qui calcule la composante PM

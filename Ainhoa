@@ -304,4 +304,134 @@ ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 
 plt.show()
 
+
+
+
+
+
+
+########################version corrigee du point M
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def creer_maillage(h, N):
+    maillage = []
+    for i in range(N):
+        maillage.append([])
+        for j in range(N):
+            maillage[i].append([])
+            for k in range(N):
+                maillage[i][j].append((i * h, j * h, k * h))
+    return maillage
+
+def calcul_composantes_vect(M_point, position):
+    # Calculer les composantes du vecteur PM pour un point M donné
+    PM = [M_point[i] - position[i] for i in range(3)]
+    return PM
+
+def calcul_norme_vect(PM):
+    # Calculer la norme du vecteur PM
+    somme = sum(comp ** 2 for comp in PM)
+    norme_PM = np.sqrt(somme)
+    return norme_PM
+
+def calcul_potentiel(epsilon, norme_PM, charge):
+    # Calcul du potentiel électrique 
+    V = charge / (4 * np.pi * epsilon * norme_PM)
+    return V
+
+def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
+    # Calculer les composantes du champ électrique
+    E_components = [(comp * charge / (norme_PM ** 3)) * (4 * np.pi * epsilon) for comp in PM]
+    E = np.array(E_components)
+    return E
+
+def distribution_plaqueinfinie(position, y):
+    x, y, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if y==yfixe: # Plaque positive
+        return 1.0
+    else:
+        return 0.0  # Aucune charge ailleurs
+
+def distribution_plaqueinfinie2(position, y):
+    x, y, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if y==yfixe2: # Plaque positive
+        return -1.0
+    else:
+        return 0.0 
+
+P_position = [10, 10, 10]
+yfixe = 6
+yfixe2 = 3
+
+epsilon = 8.85e-12 #1 / (4 * np.pi)
+
+N = 20 # maillage de dimension 20x20x20, ce qui signifie que votre espace est divisé en 20 intervalles le long de chaque axe (x, y, z), et chaque intervalle a une taille de 1 unité dans chaque direction.
+h = 1
+
+maillage_M = creer_maillage(h, N)
+maillage_P = creer_maillage(h, N)
+point_P = [P_position, 1e-9]
+
+# Calculer le potentiel électrique et le champ électrique pour chaque point du maillage
+potentiel_values = np.zeros((N, N, N))
+champ_electrique_values = np.zeros((N, N, N, 3))
+
+# Test et impression de la valeur du potentiel et du champ électrique à un point donné
+test_point = (6, 4, 0)  # Coordonnées du point de test
+
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            PM = calcul_composantes_vect(maillage_M[i][j][k], P_position)
+            norme_PM = calcul_norme_vect(PM)
+            potentiel_values[i, j, k] = calcul_potentiel(epsilon, norme_PM, point_P[1])
+            champ_electrique_values[i, j, k] = calcul_champ_electrique(epsilon, norme_PM, point_P[1], PM)
+            
+            # Test et impression de la valeur du potentiel et du champ électrique au point de test
+            if maillage_M[i][j][k] == test_point:
+                print("Coordonnées du point de test :", test_point)
+                print("Potentiel électrique au point de test :", potentiel_values[i, j, k])
+                print("Champ électrique au point de test :", champ_electrique_values[i, j, k])
+                print()
+
+# Affichage des vecteurs du champ électrique
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
+                      champ_electrique_values[i, j, k][0],
+                      champ_electrique_values[i, j, k][1],
+                      champ_electrique_values[i, j, k][2],
+                      length=1, normalize=True, color='blue')
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
+
+# Créer une grille pour les lignes équipotentielles
+x = np.linspace(0, N-1, N)
+y = np.linspace(0, N-1, N)
+z = np.linspace(0, N-1, N)
+
+X, Y, Z = np.meshgrid(x, y, z)
+
+# Tracer les lignes équipotentielles
+plt.figure(figsize=(12, 9))
+plt.contour(X[:,:,0], Y[:,:,0], potentiel_values[:,:,0], 50, cmap='coolwarm')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Lignes équipotentielles d\'un condensateur avec distribution de charge')
+plt.colorbar(label='Potentiel électrique (V)')
+plt.grid(True)
+plt.show()
+
    

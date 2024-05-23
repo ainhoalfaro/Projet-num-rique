@@ -122,7 +122,7 @@ plt.grid(True)
 plt.show()
 
 
-def distribution_plaqueinfinie (position, y, charge):
+def distribution_plaquefinie (position, y, charge):
     x, y, z = position
     # Distribution de charge pour un condensateur avec des plaques parallèles chargées
     if y == yplaque: # Plaque positive
@@ -135,7 +135,7 @@ yplaque = 6
 
 # Calcul des coordonnées du maillage P qui respectent la condition sur y==yfixe et leur charge associée
 coordonnees_maillage_P = [(i * h, yplaque, k * h) for i in range(N) for k in range(N)]
-charges_maillage_P = [distribution_plaqueinfinie(P, yplaque, P[1]) for P in coordonnees_maillage_P]
+charges_maillage_P = [distribution_plaquefinie(P, yplaque, P[1]) for P in coordonnees_maillage_P]
 
 # Calcul du champ électrique créé par la distribution des charges dans le maillage P partout dans le maillage M
 champ_electrique_M = np.zeros((N, N, N, 3))

@@ -116,7 +116,7 @@ plt.figure(figsize=(12, 9))
 plt.contour(X[:,:,0], Y[:,:,0], potentiel_values[:,:,0], 50, cmap='coolwarm')
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.title('Lignes équipotentielles d\'un point ponctuelle avec distribution de charge')
+plt.title('Lignes équipotentielles d\'une charge ponctuelle')
 plt.colorbar(label='Potentiel électrique (V)')
 plt.grid(True)
 plt.show()
@@ -208,9 +208,9 @@ for i in range(N):
 fig = plt.figure(figsize=(12, 9))
 ax = fig.add_subplot(111, projection='3d')
 
-for i in range(0, N, 4):
-    for j in range(0, N, 4):
-        for k in range(0, N, 4):
+for i in range(0, N, 2):
+    for j in range(0, N, 2):
+        for k in range(0, N, 2):
             ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
                       champ_electrique_M[i, j, k][0],
                       champ_electrique_M[i, j, k][1],
@@ -220,8 +220,19 @@ for i in range(0, N, 4):
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.set_title('Champ électrique crée par une plaque infinie')
+ax.set_title('Champ électrique crée par deux plaques')
 
+plt.show()
+
+
+
+plt.figure(figsize=(12, 9))
+plt.contour(X[:,0,:], Z[:,0,:], potentiel_values[:,0,:], 50, cmap='coolwarm')
+plt.xlabel('X')
+plt.ylabel('Z')
+plt.title('Lignes équipotentielles dans le plan XZ (y=0)')
+plt.colorbar(label='Potentiel électrique (V)')
+plt.grid(True)
 plt.show()
 
 #TEST 
@@ -234,15 +245,5 @@ for i in range (N):
     c=calcul_potentiel(epsilon, b, charge_unitaire)
     d=calcul_champ_electrique(epsilon, b, charge, a)
     print(d)
-
-fig = plt.figure(figsize=(12, 9))
-ax = fig.add_subplot(111,)
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_title('Champ électrique pour les P etudies')
-
-plt.plot(x,y,z)
-
-plt.show()
 
 

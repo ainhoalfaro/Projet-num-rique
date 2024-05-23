@@ -13,13 +13,8 @@ def maillage(h, N):
                 maillage[i][j].append((i * h, j * h, k * h))
     return maillage
 
-
-N = 20 # maillage de dimension 20x20x20
-h = 1
-
 maillage_M = maillage(h, N)
 maillage_P = maillage(h, N)
-
 #NIVEAU 4
 #creation de la fonction qui calcule la composante PM
 
@@ -88,10 +83,10 @@ test_point = [2,2,2]  # Coordonnées du point de test
 for i in range(N):
     for j in range(N):
         for k in range(N):
-            PM = calcul_composantes_vect(maillage_M[i][j][k], P[0])
+            PM = calcul_composantes_vect(maillage_M[i][j][k], position)
             norme_PM = calcul_norme_vect(PM)
-            potentiel_values[i, j, k] = calcul_potentiel(epsilon, norme_PM, P[1])
-            champ_electrique_values[i, j, k] = calcul_champ_electrique(epsilon, norme_PM, P[1], PM)
+            potentiel_values[i, j, k] = calcul_potentiel(epsilon, norme_PM, charge)
+            champ_electrique_values[i, j, k] = calcul_champ_electrique(epsilon, norme_PM, charge, PM)
             
             # Test et impression de la valeur du potentiel et du champ électrique au point de test
             if maillage_M[i][j][k] == test_point:
@@ -118,7 +113,7 @@ for i in range(0,N,2):
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.set_title('Champ électrique pour une charge ponctuelle')
+ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
 
 # Créer une grille pour les lignes équipotentielles
 x = np.linspace(0, N-1, N)
@@ -132,12 +127,59 @@ plt.figure(figsize=(12, 9))
 plt.contour(X[:,:,0], Y[:,:,0], potentiel_values[:,:,0], 50, cmap='coolwarm')
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.title('Lignes équipotentielles pour une charge ponctuelle')
+plt.title('Lignes équipotentielles d\'un point ponctuelle avec distribution de charge')
 plt.colorbar(label='Potentiel électrique (V)')
 plt.grid(True)
 plt.show()
 
 
+def distribution_plaqueinfinie (position, y, charge):
+    x, y, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if y == yplaque: # Plaque positive
+        return charge
+    else:
+        return 0.0  # Aucune charge ailleurs 
+
+# Position de la plaque chargée
+yplaque = 6
+
+# Calcul des coordonnées du maillage P qui respectent la condition sur y==yfixe et leur charge associée
+coordonnees_maillage_P = [(i * h, yplaque, k * h) for i in range(N) for k in range(N)]
+charges_maillage_P = [distribution_plaqueinfinie(P, yplaque, P[1]) for P in coordonnees_maillage_P]
+
+# Calcul du champ électrique créé par la distribution des charges dans le maillage P partout dans le maillage M
+champ_electrique_M = np.zeros((N, N, N, 3))
+
+for i in range(N):
+    for j in range(N):
+        for k in range(N):
+            E = np.zeros(3)
+            for P, charge_at_point in zip(coordonnees_maillage_P, charges_maillage_P):
+                PM = calcul_composantes_vect(maillage_M[i][j][k], P)
+                norme_PM = calcul_norme_vect(PM)
+                E += calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
+            champ_electrique_M[i, j, k] = E
+
+# Affichage des vecteurs du champ électrique
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+for i in range(0, N, 2):
+    for j in range(0, N, 2):
+        for k in range(0, N, 2):
+            ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
+                      champ_electrique_M[i, j, k][0],
+                      champ_electrique_M[i, j, k][1],
+                      champ_electrique_M[i, j, k][2],
+                      length=1, normalize=True, color='blue')
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('Champ électrique crée par une plaque infinie')
+
+plt.show()
 
 
 

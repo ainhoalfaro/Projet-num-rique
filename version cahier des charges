@@ -28,27 +28,27 @@ def calcul_potentiel(epsilon, norme_PM, charge):
 
 def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
     # Calculer les composantes du champ électrique
-    E_components =[(comp * charge / (norme_PM ** 3)) * (4 * np.pi * epsilon) for comp in PM]
-    # On utilise np.array pour assebler les composantes du vecteur 
+    E_components =[ (comp * charge) / ((norme_PM ** 3) * (4 * np.pi * epsilon) )for comp in PM]
+    # On utilise np.array pour assembler les composantes du vecteur dans un tableau numpy
     E = np.array(E_components)
     return E
 
-# Test des sous-fonctions avec un 
+# Test des sous-fonctions avec un point simple
 M = [2, 2, 2]
 P = ([1, 1, 1], 1e-9)
 position=P[0]
 charge=P[1]
+epsilon = 8.85e-12 
 PM = calcul_composantes_vect(M, P[0])
 norme_PM = calcul_norme_vect(PM)
 print("Composantes de PM:", PM)
 print("Norme de PM:", norme_PM)
 
-# Test de la fonction pour calculer le potentiel électrique
-epsilon = 8.85e-12  # Constante électrique en F/m
-#q = 1e-9  # Valeur de la charge en C 
+# Test de la fonction pour calculer le champ électrique et le potentiel
+
 potentiel = calcul_potentiel(epsilon, norme_PM, charge)
 print("Potentiel électrique calculé au point M:", potentiel, "V")
 
-# Test de la fonction pour calculer le champ électrique
+
 champ_electrique = calcul_champ_electrique(epsilon, norme_PM, charge, PM)
-print("Champ électrique calculé au point M:", champ_electrique, "N/C")
+print("Champ électrique calculé au point M:", champ_electrique, "N/C") 

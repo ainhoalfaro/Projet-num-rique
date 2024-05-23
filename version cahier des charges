@@ -13,8 +13,13 @@ def maillage(h, N):
                 maillage[i][j].append((i * h, j * h, k * h))
     return maillage
 
+
+N = 20 # maillage de dimension 20x20x20
+h = 1
+
 maillage_M = maillage(h, N)
 maillage_P = maillage(h, N)
+
 #NIVEAU 4
 #creation de la fonction qui calcule la composante PM
 
@@ -131,6 +136,12 @@ plt.title('Lignes équipotentielles pour une charge ponctuelle')
 plt.colorbar(label='Potentiel électrique (V)')
 plt.grid(True)
 plt.show()
+
+
+
+
+
+
 
 
 

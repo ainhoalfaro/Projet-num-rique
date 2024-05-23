@@ -181,9 +181,9 @@ ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
 
-#DEUX PLAQUES: 
+#############################################################################DEUX PLAQUES: 
 
-def distribution_plaqueinfinie (position, yplaque1, yplaque2 ,charge):
+def distribution_doubleplaque (position, yplaque1, yplaque2 ,charge):
     x, y, z = position
     # Distribution de charge pour un condensateur avec des plaques parallèles chargées
     if y == yplaque1: # Plaque positive
@@ -199,7 +199,7 @@ yplaque2=2
 
 # Calcul des coordonnées du maillage P qui respectent la condition sur y==yfixe et leur charge associée
 coordonnees_maillage_P = [(i * h, y, k * h) for i in range(N) for k in range(N) for y in [yplaque1,yplaque2]]
-charges_maillage_P = [distribution_plaqueinfinie(P, yplaque1, yplaque2, charge) for P in coordonnees_maillage_P]
+charges_maillage_P = [distribution_doubleplaque(P, yplaque1, yplaque2, charge) for P in coordonnees_maillage_P]
 
 
 # Calcul du champ électrique créé par la distribution des charges dans le maillage P partout dans le maillage M

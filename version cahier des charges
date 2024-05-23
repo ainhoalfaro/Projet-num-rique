@@ -104,9 +104,9 @@ for i in range(N):
 fig = plt.figure(figsize=(12, 9))
 ax = fig.add_subplot(111, projection='3d')
 
-for i in range(N):
-    for j in range(N):
-        for k in range(N):
+for i in range(0,N,2):
+    for j in range(0,N,2):
+        for k in range(0,N,2):
             ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
                       champ_electrique_values[i, j, k][0],
                       champ_electrique_values[i, j, k][1],

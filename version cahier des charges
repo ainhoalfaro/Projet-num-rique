@@ -76,10 +76,6 @@ h = 1
 potentiel_values = np.zeros((N, N, N))
 champ_electrique_values = np.zeros((N, N, N, 3))
 
-# Test et impression de la valeur du potentiel et du champ électrique à un point donné
-test_point = [2,2,2]  # Coordonnées du point de test
-
-
 for i in range(N):
     for j in range(N):
         for k in range(N):
@@ -106,7 +102,7 @@ for i in range(0,N,2):
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.set_title('Champ électrique d\'un condensateur avec distribution de charge')
+ax.set_title('Champ électrique d\'une charge ponctuelle')
 
 # Créer une grille pour les lignes équipotentielles
 x = np.linspace(0, N-1, N)
@@ -174,7 +170,7 @@ ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
 
-#############################################################################DEUX PLAQUES: 
+#DEUX PLAQUES: 
 
 def distribution_doubleplaque (position, yplaque1, yplaque2 ,charge):
     x, y, z = position
@@ -228,27 +224,14 @@ ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
 
-
-
-
-
-
-################TEST 
-
+#TEST 
 
 for i in range (N):
     M_point=(10,i,10)
     position=(10,6,10)
-
-
     a=calcul_composantes_vect(M_point, position)
-    
-
     b=calcul_norme_vect(a)
-    
-
     c=calcul_potentiel(epsilon, b, charge_unitaire)
-
     d=calcul_champ_electrique(epsilon, b, charge, a)
     print(d)
 
@@ -260,14 +243,6 @@ ax.set_title('Champ électrique pour les P etudies')
 
 plt.plot(x,y,z)
 
-
 plt.show()
-
-
-
-
-
-
-
 
 

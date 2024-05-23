@@ -87,13 +87,6 @@ for i in range(N):
             norme_PM = calcul_norme_vect(PM)
             potentiel_values[i, j, k] = calcul_potentiel(epsilon, norme_PM, charge)
             champ_electrique_values[i, j, k] = calcul_champ_electrique(epsilon, norme_PM, charge, PM)
-            
-# Test et impression de la valeur du potentiel et du champ électrique au point de test
-    if maillage_M[i][j][k] == test_point:
-         print("Coordonnées du point de test :", test_point)
-         print("Potentiel électrique au point de test :", potentiel_values[i, j, k])
-         print("Champ électrique au point de test :", champ_electrique_values[i, j, k])
-         print()
 
 # Affichage des vecteurs du champ électrique
 fig = plt.figure(figsize=(12, 9))

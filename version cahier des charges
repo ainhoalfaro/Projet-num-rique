@@ -28,7 +28,7 @@ def calcul_potentiel(epsilon, norme_PM, charge):
 
 def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
     # Calculer les composantes du champ électrique
-    E_components = [(comp / norme_PM**3) / (4 * np.pi * epsilon) for comp in PM]
+    E_components =[(comp * charge / (norme_PM ** 3)) * (4 * np.pi * epsilon) for comp in PM]
     # On utilise np.array pour assebler les composantes du vecteur 
     E = np.array(E_components)
     return E

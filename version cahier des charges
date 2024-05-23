@@ -1,0 +1,54 @@
+ 
+#NIVEAU 4
+#creation de la fonction qui calcule la composante PM
+
+def calcul_composantes_vect(M, position):
+    # Calculer les composantes du vecteur PM
+    PM = [M[i] - position[i] for i in range(3)]
+    return PM
+
+
+#NIVEAU 3
+import numpy as np
+
+def calcul_norme_vect(PM):
+    # calculer la norme du vecteur PM
+    somme = 0
+    for i in PM:
+        somme += i** 2
+    norme_PM = np.sqrt(somme)
+    return norme_PM
+
+
+#NIVEAU 2
+def calcul_potentiel(epsilon, norme_PM, charge):
+    # Calcul du potentiel électrique au point M dû à la charge q
+    V = charge / (4 * np.pi * epsilon * norme_PM)
+    return V
+
+def calcul_champ_electrique(epsilon, norme_PM, charge, PM):
+    # Calculer les composantes du champ électrique
+    E_components = [(comp / norme_PM**3) / (4 * np.pi * epsilon) for comp in PM]
+    # On utilise np.array pour assebler les composantes du vecteur 
+    E = np.array(E_components)
+    return E
+
+# Test des sous-fonctions avec un 
+M = [2, 2, 2]
+P = ([1, 1, 1], 1e-9)
+position=P[0]
+charge=P[1]
+PM = calcul_composantes_vect(M, P[0])
+norme_PM = calcul_norme_vect(PM)
+print("Composantes de PM:", PM)
+print("Norme de PM:", norme_PM)
+
+# Test de la fonction pour calculer le potentiel électrique
+epsilon = 8.85e-12  # Constante électrique en F/m
+#q = 1e-9  # Valeur de la charge en C 
+potentiel = calcul_potentiel(epsilon, norme_PM, charge)
+print("Potentiel électrique calculé au point M:", potentiel, "V")
+
+# Test de la fonction pour calculer le champ électrique
+champ_electrique = calcul_champ_electrique(epsilon, norme_PM, charge, PM)
+print("Champ électrique calculé au point M:", champ_electrique, "N/C")

@@ -148,6 +148,26 @@ yplaque = 6
 coordonnees_maillage_P = [(i * h, yplaque, k * h) for i in range(N) for k in range(N)]
 charges_maillage_P = [distribution_plaqueinfinie(P, yplaque, P[1]) for P in coordonnees_maillage_P]
 
+
+def distribution_doubleplaque (position, yplaque1, yplaque2 ,charge):
+    x, y, z = position
+    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
+    if y == yplaque1: # Plaque positive
+        return charge
+    elif y==yplaque2:
+        return -charge
+    else:
+        return 0.0  # Aucune charge ailleurs 
+
+# Position de la plaque chargée
+yplaque1 = 2
+yplaque2=12
+
+# Calcul des coordonnées du maillage P qui respectent la condition sur y==yfixe et leur charge associée
+coordonnees_maillage_P = [(i * h, y, k * h) for i in range(N) for k in range(N) for y in [yplaque1,yplaque2]]
+charges_maillage_P = [distribution_doubleplaque(P, yplaque1, yplaque2, charge) for P in coordonnees_maillage_P]
+
+
 # Calcul du champ électrique créé par la distribution des charges dans le maillage P partout dans le maillage M
 champ_electrique_M = np.zeros((N, N, N, 3))
 
@@ -180,63 +200,6 @@ ax.set_zlabel('Z')
 ax.set_title('Champ électrique crée par une plaque infinie')
 
 plt.show()
-
-#############################################################################DEUX PLAQUES: 
-
-def distribution_doubleplaque (position, yplaque1, yplaque2 ,charge):
-    x, y, z = position
-    # Distribution de charge pour un condensateur avec des plaques parallèles chargées
-    if y == yplaque1: # Plaque positive
-        return charge
-    elif y==yplaque2:
-        return -charge
-    else:
-        return 0.0  # Aucune charge ailleurs 
-
-# Position de la plaque chargée
-yplaque1 = 12
-yplaque2=2
-
-# Calcul des coordonnées du maillage P qui respectent la condition sur y==yfixe et leur charge associée
-coordonnees_maillage_P = [(i * h, y, k * h) for i in range(N) for k in range(N) for y in [yplaque1,yplaque2]]
-charges_maillage_P = [distribution_doubleplaque(P, yplaque1, yplaque2, charge) for P in coordonnees_maillage_P]
-
-
-# Calcul du champ électrique créé par la distribution des charges dans le maillage P partout dans le maillage M
-champ_electrique_M = np.zeros((N, N, N, 3))
-
-for i in range(N):
-    for j in range(N):
-        for k in range(N):
-            E = np.zeros(3)
-            for P, charge_at_point in zip(coordonnees_maillage_P, charges_maillage_P):
-                PM = calcul_composantes_vect(maillage_M[i][j][k], P)
-                norme_PM = calcul_norme_vect(PM)
-                E += calcul_champ_electrique(epsilon, norme_PM, charge_at_point, PM)
-            champ_electrique_M[i, j, k] = E
-
-# Affichage des vecteurs du champ électrique
-fig = plt.figure(figsize=(12, 9))
-ax = fig.add_subplot(111, projection='3d')
-
-for i in range(0, N, 4):
-    for j in range(0, N, 4):
-        for k in range(0, N, 4):
-            ax.quiver(maillage_M[i][j][k][0], maillage_M[i][j][k][1], maillage_M[i][j][k][2],
-                      champ_electrique_M[i, j, k][0],
-                      champ_electrique_M[i, j, k][1],
-                      champ_electrique_M[i, j, k][2],
-                      length=1, normalize=True, color='blue')
-
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_zlabel('Z')
-ax.set_title('Champ électrique crée par une plaque infinie')
-
-plt.show()
-
-
-
 
 
 

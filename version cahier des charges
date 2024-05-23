@@ -369,7 +369,12 @@ ax.set_title('Champ électrique crée par une plaque infinie')
 plt.show()
 
 
-#TEST DU PROGRAMME
+
+
+
+
+################TEST 
+
 
 for i in range (N):
     M_point=(10,i,10)
@@ -382,10 +387,21 @@ for i in range (N):
     b=calcul_norme_vect(a)
     
 
-    c=calcul_potentiel(epsilon, b, charge)
+    c=calcul_potentiel(epsilon, b, charge_unitaire)
 
     d=calcul_champ_electrique(epsilon, b, charge, a)
     print(d)
+
+fig = plt.figure(figsize=(12, 9))
+ax = fig.add_subplot(111,)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_title('Champ électrique pour les P etudies')
+
+plt.plot(x,y,z)
+
+
+plt.show()
 
 
 
